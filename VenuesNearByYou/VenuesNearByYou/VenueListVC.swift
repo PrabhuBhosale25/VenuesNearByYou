@@ -9,22 +9,11 @@
 import UIKit
 import CoreLocation
 
-class VenueListVC: UIViewController {
+class VenueListVC: BaseVC {
         
         var locationManager:CLLocationManager!
         @IBOutlet weak var venueTable: UITableView!
         var venueObjects : [Venue] = []
-
-        func determineDeviceCurrentLocation() {
-                locationManager = CLLocationManager()
-                locationManager.delegate = self
-                locationManager.desiredAccuracy = kCLLocationAccuracyBest
-                locationManager.requestWhenInUseAuthorization()
-                
-                if CLLocationManager.locationServicesEnabled() {
-                        locationManager.startUpdatingLocation()
-                }
-        }
         
         override func viewDidLoad() {
                 super.viewDidLoad()
@@ -38,15 +27,22 @@ class VenueListVC: UIViewController {
         {
                 var  parameters : Dictionary<String,String> = [:]
                 parameters["ll"] = String.init(format: "%f,%f", location.coordinate.latitude, location.coordinate.longitude)
-                
+                print("location parameters \(parameters)")
                 ORWrapper().callWebservice(MethodType.get, param: parameters , path: AppConstants.searchEndPoint, successCompletionHandler: { (result) in
                         if result.count > 0
                         {
                                  self.venueObjects = result.sorted(by: { $0.distance < $1.distance })
                                 self.venueTable.reloadData()
+                                self.removeActivityIndicator()
+                        }
+                        else
+                        {
+                                self.showAlertView(message: "Venues not found")
+                                self.removeActivityIndicator()
                         }
                 }) { (error) in
-                        
+                        self.showAlertView(message: "Location services are not enabled")
+                        self.removeActivityIndicator()
                 }
         }
         func redirectToDetailsVC(_ venue : Venue)
@@ -55,7 +51,28 @@ class VenueListVC: UIViewController {
                 detailsVC.selectedVenue = venue
                 self.navigationController?.pushViewController(detailsVC, animated: true)
         }
-        override func didReceiveMemoryWarning() {
+        
+        func determineDeviceCurrentLocation()
+        {
+                self.showActivityIndicator()
+                
+                locationManager = CLLocationManager()
+                locationManager.delegate = self
+                locationManager.desiredAccuracy = kCLLocationAccuracyBest
+                locationManager.requestWhenInUseAuthorization()
+                
+                if CLLocationManager.locationServicesEnabled()
+                {
+                        locationManager.startUpdatingLocation()
+                }
+                else
+                {
+                        self.showAlertView(message: "Location services are not enabled")
+                }
+        }
+        
+        override func didReceiveMemoryWarning()
+        {
                 super.didReceiveMemoryWarning()
                 // Dispose of any resources that can be recreated.
         }        
@@ -75,6 +92,8 @@ extension VenueListVC : CLLocationManagerDelegate, UITableViewDataSource, UITabl
         func locationManager(_ manager: CLLocationManager, didFailWithError error: Error)
         {
                 print("Error in finding users current location \(error)")
+                self.showAlertView(message: "Location services are failed to get location")
+                self.removeActivityIndicator()
         }
         
         //MARK : Tableview data source

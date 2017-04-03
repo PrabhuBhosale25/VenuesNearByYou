@@ -9,6 +9,7 @@
 import UIKit
 import Alamofire
 import ObjectMapper
+import ReachabilitySwift
 
 enum MethodType
 {
@@ -22,10 +23,16 @@ class ORWrapper: NSObject {
 
         func callWebservice(_ method: MethodType, param: Dictionary<String, String>, path : String, successCompletionHandler: @escaping (_ r: [Venue]) -> Void, failureCompletionHandler: @escaping (_ r: Dictionary<String, AnyObject>) -> Void)
         {
-                let url = AppConstants.baseUrl + path
+                let reachability : Reachability = (Reachability.init())!
+                if !reachability.isReachable
+                {
+                        failureCompletionHandler([:])
+                        print("waiting for network")
+                        return
+                }
                 
+                let url = AppConstants.baseUrl + path
                 var  parameters : Dictionary<String,String> = param
-//                parameters["ll"]  = "19.021469, 72.842714"
                 parameters["client_id"]  = AppConstants.appInformation().CLIENT_ID
                 parameters["client_secret"]  = AppConstants.appInformation().CLIENT_SECRET
                 parameters["v"]  = AppConstants.convertDateInFormat()

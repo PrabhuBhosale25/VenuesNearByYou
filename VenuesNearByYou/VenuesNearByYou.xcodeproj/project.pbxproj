@@ -20,6 +20,7 @@
 		E9AA1B921E9273A700BB084A /* ORWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9AA1B8F1E9273A700BB084A /* ORWrapper.swift */; };
 		E9AA1B931E9273A700BB084A /* Venue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9AA1B901E9273A700BB084A /* Venue.swift */; };
 		E9AA1B951E9292D900BB084A /* VenueDetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9AA1B941E9292D900BB084A /* VenueDetailsVC.swift */; };
+		E9AA1B971E92A32D00BB084A /* BaseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9AA1B961E92A32D00BB084A /* BaseVC.swift */; };
 		F2B29F9814B310B0844890A6 /* Pods_VenuesNearByYouTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9DBD447CF79DB82A5C88412B /* Pods_VenuesNearByYouTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -67,6 +68,7 @@
 		E9AA1B8F1E9273A700BB084A /* ORWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORWrapper.swift; sourceTree = "<group>"; };
 		E9AA1B901E9273A700BB084A /* Venue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Venue.swift; sourceTree = "<group>"; };
 		E9AA1B941E9292D900BB084A /* VenueDetailsVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VenueDetailsVC.swift; sourceTree = "<group>"; };
+		E9AA1B961E92A32D00BB084A /* BaseVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +157,7 @@
 				E9AA1B671E926C9200BB084A /* Assets.xcassets */,
 				E9AA1B691E926C9200BB084A /* LaunchScreen.storyboard */,
 				E9AA1B6C1E926C9200BB084A /* Info.plist */,
+				E9AA1B961E92A32D00BB084A /* BaseVC.swift */,
 			);
 			path = VenuesNearByYou;
 			sourceTree = "<group>";
@@ -254,7 +257,8 @@
 				TargetAttributes = {
 					E9AA1B5C1E926C9100BB084A = {
 						CreatedOnToolsVersion = 8.2;
-						ProvisioningStyle = Automatic;
+						DevelopmentTeam = 9LF24P7WQU;
+						ProvisioningStyle = Manual;
 					};
 					E9AA1B701E926C9200BB084A = {
 						CreatedOnToolsVersion = 8.2;
@@ -463,6 +467,7 @@
 				E9AA1B931E9273A700BB084A /* Venue.swift in Sources */,
 				E9AA1B631E926C9100BB084A /* VenueListVC.swift in Sources */,
 				E9AA1B911E9273A700BB084A /* AppConstants.swift in Sources */,
+				E9AA1B971E92A32D00BB084A /* BaseVC.swift in Sources */,
 				E9AA1B611E926C9100BB084A /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -614,10 +619,14 @@
 			baseConfigurationReference = 479C99A8A0091EFE17630532 /* Pods-VenuesNearByYou.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 9LF24P7WQU;
 				INFOPLIST_FILE = VenuesNearByYou/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.neosofttech.VenuesNearByYou;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "ca24c249-9f1a-43db-9bd6-7f41067cffef";
+				PROVISIONING_PROFILE_SPECIFIER = Development_WildCard;
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -627,10 +636,14 @@
 			baseConfigurationReference = 938426055C9E6E1DAF6CC3A4 /* Pods-VenuesNearByYou.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 9LF24P7WQU;
 				INFOPLIST_FILE = VenuesNearByYou/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.neosofttech.VenuesNearByYou;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "ca24c249-9f1a-43db-9bd6-7f41067cffef";
+				PROVISIONING_PROFILE_SPECIFIER = Development_WildCard;
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
