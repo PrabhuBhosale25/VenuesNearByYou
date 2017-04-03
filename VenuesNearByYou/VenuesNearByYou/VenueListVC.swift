@@ -1,5 +1,5 @@
 //
-//  VenueList.swift
+//  VenueListVC.swift
 //  VenuesNearbyYou
 //
 //  Created by webwerks on 4/3/17.
@@ -9,7 +9,7 @@
 import UIKit
 import CoreLocation
 
-class VenueList: UIViewController {
+class VenueListVC: UIViewController {
         
         var locationManager:CLLocationManager!
         @IBOutlet weak var venueTable: UITableView!
@@ -30,6 +30,8 @@ class VenueList: UIViewController {
                 super.viewDidLoad()
                 // Do any additional setup after loading the view, typically from a nib.
                 self.determineDeviceCurrentLocation()
+                
+                self.title = "Venues near by You"
         }
         
         func callVenueAPI(location : CLLocation)
@@ -40,31 +42,32 @@ class VenueList: UIViewController {
                 ORWrapper().callWebservice(MethodType.get, param: parameters , path: AppConstants.searchEndPoint, successCompletionHandler: { (result) in
                         if result.count > 0
                         {
-                                self.venueObjects = result
+                                 self.venueObjects = result.sorted(by: { $0.distance < $1.distance })
                                 self.venueTable.reloadData()
                         }
                 }) { (error) in
                         
                 }
         }
+        func redirectToDetailsVC(_ venue : Venue)
+        {
+                let detailsVC = self.storyboard?.instantiateViewController(withIdentifier: "VenueDetailsVC") as! VenueDetailsVC
+                detailsVC.selectedVenue = venue
+                self.navigationController?.pushViewController(detailsVC, animated: true)
+        }
         override func didReceiveMemoryWarning() {
                 super.didReceiveMemoryWarning()
                 // Dispose of any resources that can be recreated.
-        }
-        
-        
+        }        
 }
 
-extension VenueList : CLLocationManagerDelegate, UITableViewDataSource, UITableViewDelegate
+extension VenueListVC : CLLocationManagerDelegate, UITableViewDataSource, UITableViewDelegate
 {
         //MARK : Location manage delegate
         func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
                 let userLocation:CLLocation = locations.first! as CLLocation
                 
                 manager.stopUpdatingLocation()
-                
-                print("user latitude = \(userLocation.coordinate.latitude)")
-                print("user longitude = \(userLocation.coordinate.longitude)")
                 
                 self.callVenueAPI(location: userLocation)
         }
@@ -87,8 +90,16 @@ extension VenueList : CLLocationManagerDelegate, UITableViewDataSource, UITableV
                         cell = UITableViewCell(style:UITableViewCellStyle.subtitle, reuseIdentifier:cellReuseIdentifier)
                 }
                 cell!.textLabel!.text = venue.name
-                cell?.detailTextLabel?.text =  String(venue.distance)
+                cell!.detailTextLabel?.textColor = UIColor.gray
+                cell!.detailTextLabel?.text =  String.init(format: "%d meters", venue.distance)  //String(venue.distance)
                 return cell!
         }
+        
+        //MARK : Tableview data source
+        func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
+        {
+                let venue : Venue = venueObjects[indexPath.row]
+                self.redirectToDetailsVC(venue)
+         }
 }
 

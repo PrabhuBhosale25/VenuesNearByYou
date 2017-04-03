@@ -29,12 +29,12 @@ class Venue: Mappable {
 
         func mapping(map: Map)
         {
-                id                      <-      map["id"]
-                name                <-      map["name"]
-                address            <-      map["address"]
-                crossStreet        <-      map["crossStreet"]
-                location.lat    <-      map["lat"]
-                location.lng   <-       map["lng"]
-                distance  <-       map["distance"]
+                id                              <-      map["id"]
+                name                            <-      map["name"]
+                address                         <-      map["location.address", nested: true]
+                crossStreet                     <-      map["location.crossStreet", nested: true]
+                location.lat                    <-      map["location.lat", nested: true]
+                location.lng                    <-      map["location.lng", nested: true]
+                distance                        <-       map["location.distance", nested: true]
         }
 }
