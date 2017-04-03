@@ -12,6 +12,19 @@ import CoreLocation
 class VenueList: UIViewController {
         
         var locationManager:CLLocationManager!
+        @IBOutlet weak var venueTable: UITableView!
+        var venueObjects : [Venue] = []
+
+        func determineDeviceCurrentLocation() {
+                locationManager = CLLocationManager()
+                locationManager.delegate = self
+                locationManager.desiredAccuracy = kCLLocationAccuracyBest
+                locationManager.requestWhenInUseAuthorization()
+                
+                if CLLocationManager.locationServicesEnabled() {
+                        locationManager.startUpdatingLocation()
+                }
+        }
         
         override func viewDidLoad() {
                 super.viewDidLoad()
@@ -25,7 +38,11 @@ class VenueList: UIViewController {
                 parameters["ll"] = String.init(format: "%f,%f", location.coordinate.latitude, location.coordinate.longitude)
                 
                 ORWrapper().callWebservice(MethodType.get, param: parameters , path: AppConstants.searchEndPoint, successCompletionHandler: { (result) in
-                        
+                        if result.count > 0
+                        {
+                                self.venueObjects = result
+                                self.venueTable.reloadData()
+                        }
                 }) { (error) in
                         
                 }
@@ -38,19 +55,9 @@ class VenueList: UIViewController {
         
 }
 
-extension VenueList : CLLocationManagerDelegate
+extension VenueList : CLLocationManagerDelegate, UITableViewDataSource, UITableViewDelegate
 {
-        func determineDeviceCurrentLocation() {
-                locationManager = CLLocationManager()
-                locationManager.delegate = self
-                locationManager.desiredAccuracy = kCLLocationAccuracyBest
-                locationManager.requestWhenInUseAuthorization()
-                
-                if CLLocationManager.locationServicesEnabled() {
-                        locationManager.startUpdatingLocation()
-                }
-        }
-        
+        //MARK : Location manage delegate
         func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
                 let userLocation:CLLocation = locations.first! as CLLocation
                 
@@ -65,6 +72,23 @@ extension VenueList : CLLocationManagerDelegate
         func locationManager(_ manager: CLLocationManager, didFailWithError error: Error)
         {
                 print("Error in finding users current location \(error)")
+        }
+        
+        //MARK : Tableview data source
+        func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+        {
+               return self.venueObjects.count
+        }
+        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+                let cellReuseIdentifier: String = "VenueCell"
+                let venue : Venue = venueObjects[indexPath.row]
+                var cell:UITableViewCell? = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier)
+                if (cell == nil) {
+                        cell = UITableViewCell(style:UITableViewCellStyle.subtitle, reuseIdentifier:cellReuseIdentifier)
+                }
+                cell!.textLabel!.text = venue.name
+                cell?.detailTextLabel?.text =  String(venue.distance)
+                return cell!
         }
 }
 
