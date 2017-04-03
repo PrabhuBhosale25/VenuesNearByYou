@@ -25,7 +25,7 @@ class ORWrapper: NSObject {
                 let url = AppConstants.baseUrl + path
                 
                 var  parameters : Dictionary<String,String> = param
-                parameters["ll"]  = "19.021469, 72.842714"
+//                parameters["ll"]  = "19.021469, 72.842714"
                 parameters["client_id"]  = AppConstants.appInformation().CLIENT_ID
                 parameters["client_secret"]  = AppConstants.appInformation().CLIENT_SECRET
                 parameters["v"]  = AppConstants.convertDateInFormat()
@@ -37,9 +37,9 @@ class ORWrapper: NSObject {
                         {
                                 if let meta = result?["meta"] as? Dictionary<String, AnyObject>
                                 {
-                                        if let code = meta["code"] as? String
+                                        if let code = meta["code"] as? NSNumber
                                         {
-                                                if code != "200"
+                                                if code.intValue != 200
                                                 {
                                                         print("error \(meta["errorDetail"])")
                                                         failureCompletionHandler(meta)
@@ -48,7 +48,7 @@ class ORWrapper: NSObject {
                                                 {
                                                         if let response = result?["response"] as? Dictionary<String, Any>
                                                         {
-                                                                if let venue = response["venue"] as? [Dictionary<String, Any>]
+                                                                if let venue = response["venues"] as? [Dictionary<String, Any>]
                                                                 {
                                                                         let venueObjArray = Mapper<Venue>(context: nil).mapArray(JSONArray: venue)
                                                                         successCompletionHandler(venueObjArray!)

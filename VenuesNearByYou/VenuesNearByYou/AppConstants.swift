@@ -18,6 +18,7 @@ class AppConstants: NSObject {
         }
         
         static let baseUrl = "https://api.foursquare.com/v2/"
+        static let searchEndPoint = "venues/search/"
         
         class func convertDateInFormat() -> String {
                
